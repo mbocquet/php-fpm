@@ -1,0 +1,36 @@
+---
+# tasks file for php-fpm
+- name: "packages"
+  package:
+    name: "{{ item }}"
+  with_items:
+    - php7.0-fpm
+  tags:
+    - php-fpm
+    - packages
+
+- name: "check default pool"
+  stat:
+    path: /etc/php/7.0/fpm/pool.d/www.conf
+  register: defpool
+  tags:
+    - php-fpm
+    - defpool
+
+- name: "disable default pool"
+  command: mv /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.conf.off
+  when: defpool.stat.exists and fpm_pool_name is defined
+  tags:
+    - php-fpm
+    - defpool
+
+- name: "configure {{ fpm_pool_name }}"
+  template:
+    src: php-fpm-pool.conf.j2
+    dest: '/etc/php/7.0/fpm/pool.d/{{ fpm_pool_name }}.conf'
+  notify: php-fpm restart
+  when: fpm_pool_name is defined
+  tags:
+    - php-fpm
+    - pool
+...
