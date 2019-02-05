@@ -1,4 +1,9 @@
 ---
 # defaults file for php-fpm
-php_version: "7.0"
+
+# These are examples which should be put in inventory group_vars, host_vars or
+# inline vars
+
+# php_version: "7.0"
+# fpm_pm_max_children: '5'
 ...
