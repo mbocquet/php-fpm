@@ -1,8 +1,33 @@
 ---
 # tasks file for php-fpm
+- name: sury repo key
+  apt_key:
+    url: "https://packages.sury.org/php/apt.gpg"
+    state: present
+  tags:
+    - php-fpm
+    - apt
+    - key
+
+- name: sury repo
+  apt_repository:
+    filename: php
+    repo: 'deb https://packages.sury.org/php/ stretch main'
+  when:
+    - php_origin is defined
+    - php_origin == "sury"
+  register: repo
+  tags:
+    - php-fpm
+    - apt
+    - repository
+
 - name: "packages"
   package:
     name: "php{{ php_version }}-fpm"
+  when:
+    - ansible_check_mode == False
+    - repo is succeeded
   tags:
     - php-fpm
     - packages
@@ -17,18 +42,23 @@
 
 - name: "disable default pool"
   command: 'mv /etc/php/{{ php_version }}/fpm/pool.d/www.conf /etc/php/{{ php_version }}/fpm/pool.d/www.conf.off'
-  when: defpool.stat.exists and fpm_pool_name is defined
+  when:
+    - defpool.stat.exists
+    - fpm_pools is defined
   tags:
     - php-fpm
     - defpool
 
-- name: "configure {{ fpm_pool_name }}"
+- name: "configure pool(s)"
   template:
     src: php-fpm-pool.conf.j2
-    dest: '/etc/php/{{ php_version }}/fpm/pool.d/{{ fpm_pool_name }}.conf'
+    dest: '/etc/php/{{ php_version }}/fpm/pool.d/{{ item.name }}.conf'
+    backup: yes
+  with_items: "{{ fpm_pools }}"
   notify: php-fpm restart
-  when: fpm_pool_name is defined
+  when:
+    - fpm_pools is defined
   tags:
     - php-fpm
-    - pool
+    - pools
 ...

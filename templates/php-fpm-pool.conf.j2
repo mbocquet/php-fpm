@@ -1,13 +1,13 @@
 ; {{ ansible_managed }}. role: php-fpm, file: php-fpm-pool.conf.j2
 
-[{{ fpm_pool_name }}] 
+[{{ item.name }}] 
 user = www-data
 group = www-data
-listen = /run/php/php{{ php_version }}-fpm-{{ fpm_pool_name }}.sock
+listen = /run/php/php{{ php_version }}-fpm-{{ item.name }}.sock
 listen.owner = www-data
 listen.group = www-data
 pm = dynamic
-pm.max_children = {{ fpm_pm_max_children | default(5) }}
+pm.max_children = {{ item.max_children | default(5) }}
 pm.start_servers = 2
 pm.min_spare_servers = 1
 pm.max_spare_servers = 3
