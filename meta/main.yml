@@ -23,7 +23,7 @@ galaxy_info:
   galaxy_tags:
     - php
     - fpm
-    - FastCGI Process Manager
+    - fastcgi
     - sysadmin
 
 dependencies: []
