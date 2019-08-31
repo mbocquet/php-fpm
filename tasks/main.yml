@@ -12,7 +12,7 @@
 - name: sury repo
   apt_repository:
     filename: php
-    repo: 'deb https://packages.sury.org/php/ stretch main'
+    repo: 'deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main'
   when:
     - php_origin is defined
     - php_origin == "sury"
