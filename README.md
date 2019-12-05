@@ -16,7 +16,7 @@ None.
 
 ## Install this roles as submodule of an existing GIT repository
 
-`git submodule add https://github.com/mbocquet/php-fpm.git roles/php-fpm`
+`git submodule add https://git.sekoya.org/mbocquet/php-fpm.git roles/php-fpm`
 
 ## Example Playbook
 
