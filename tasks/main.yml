@@ -22,15 +22,16 @@
     - apt
     - repository
 
-- name: "packages"
+- name: package
   package:
     name: "php{{ php_version }}-fpm"
+    force_apt_get: yes
   when:
     - not ansible_check_mode
     - repo is succeeded
   tags:
     - php-fpm
-    - packages
+    - package
 
 - name: "check default pool"
   stat:
