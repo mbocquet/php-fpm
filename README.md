@@ -1,6 +1,6 @@
-# PHP-FPM
+# php-fpm
 
-Ansible role to install and configure PHP-FPM (FastCGI Process Manager).
+Ansible role to install and configure php-fpm (PHP FastCGI Process Manager).
 
 ## Requirements
 
