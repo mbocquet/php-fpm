@@ -33,7 +33,7 @@
     - php-fpm
     - package
 
-- name: "check default pool"
+- name: check default pool
   stat:
     path: "/etc/php/{{ php_version }}/fpm/pool.d/www.conf"
   register: defpool
@@ -41,7 +41,7 @@
     - php-fpm
     - defpool
 
-- name: "disable default pool"
+- name: disable default pool
   command: 'mv /etc/php/{{ php_version }}/fpm/pool.d/www.conf /etc/php/{{ php_version }}/fpm/pool.d/www.conf.off'
   when:
     - defpool.stat.exists
@@ -55,7 +55,7 @@
     src: php-fpm-pool.conf.j2
     dest: '/etc/php/{{ php_version }}/fpm/pool.d/{{ item.name }}.conf'
     backup: yes
-  with_items: "{{ fpm_pools }}"
+  loop: "{{ fpm_pools }}"
   notify: php-fpm restart
   when:
     - fpm_pools is defined
