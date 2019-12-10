@@ -4,18 +4,24 @@
 # These are examples which should be put in inventory group_vars, host_vars or
 # inline vars
 
-# php_origin: 'default' (Debian packages : 7.0) or 'sury' (7.[0123])
+# php_origin: 'default' (Debian buster : 7.3) or 'sury' (7.[01234])
 php_origin: 'default'
 
 # php_version: "7.0"
 
-# fpm_pools: define variable for specific pools
+# fpm_pools: define variables for specific pools
 # fpm_pools:
 #   - name: 'mypool'
-#     max_children: '10'
+#     type: static
+#     max_children: 10
 #   - name: 'yourpool'
-#     max_children: '5'
-#     start_servers: '2'
-#     min_spare_servers: '1'
-#     max_spare_servers: '3'
+#     type: dynamic
+#     max_children: 5
+#     start_servers: 2
+#     min_spare_servers: 1
+#     max_spare_servers: 3
+#   - name: 'theirpool'
+#     type: ondemand
+#     max_children: 120
+#     process_idle_timeout: 120
 ...
