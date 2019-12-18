@@ -9,7 +9,7 @@ php_origin: 'default'
 
 # php_version: "7.0"
 
-# fpm_pools: define variables for specific pools
+# fpm_pools: define variables for specific pool types
 # fpm_pools:
 #   - name: 'mypool'
 #     type: static
@@ -24,4 +24,5 @@ php_origin: 'default'
 #     type: ondemand
 #     max_children: 120
 #     process_idle_timeout: 120
+#     memory_limit: 128M
 ...
