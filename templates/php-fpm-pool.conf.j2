@@ -1,6 +1,6 @@
 ; {{ ansible_managed }}. role: {{ role_name }}, template: php-fpm-pool.conf.j2
 
-[{{ item.name }}] 
+[{{ item.name }}]
 user = www-data
 group = www-data
 listen = /run/php/php{{ php_version | default('7.3') }}-fpm-{{ item.name }}.sock

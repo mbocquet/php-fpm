@@ -15,7 +15,8 @@
 - name: sury repo
   apt_repository:
     filename: php
-    repo: 'deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main'
+    repo: 'deb https://packages.sury.org/php/ \
+      {{ ansible_distribution_release }} main'
   when:
     - php_origin is defined
     - php_origin == "sury"
@@ -44,7 +45,8 @@
     - defpool
 
 - name: disable default pool
-  command: "mv /etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/www.conf /etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/www.conf.off"
+  command: "mv /etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/www.conf \
+    /etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/www.conf.off"
   when:
     - defpool.stat.exists
     - fpm_pools is defined
@@ -55,8 +57,9 @@
 - name: "configure pool(s)"
   template:
     src: php-fpm-pool.conf.j2
-    dest: "/etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/{{ item.name }}.conf"
-    backup: yes
+    dest: "/etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/\
+      {{ item.name }}.conf"
+    backup: true
   loop: "{{ fpm_pools }}"
   notify: php-fpm restart
   when:
