@@ -4,4 +4,3 @@
   service:
     name: "php{{ php_version }}-fpm"
     state: restarted
-  when: "'php{{ php_version }}-fpm.service' in services"
