@@ -65,6 +65,7 @@
     src: php-fpm-pool.conf.j2
     dest: "/etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/\
       {{ item.name }}.conf"
+    mode: 0644
     backup: true
   loop: "{{ fpm_pools }}"
   notify: php-fpm restart
