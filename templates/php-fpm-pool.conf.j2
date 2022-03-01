@@ -3,9 +3,13 @@
 [{{ item.name }}]
 user = www-data
 group = www-data
-listen = /run/php/php{{ php_version | default('7.3') }}-fpm-{{ item.name }}.sock
-listen.owner = www-data
-listen.group = www-data
+listen = {{ item.listen }}
+{% if item.listen_owner is defined %}
+listen.owner = {{ item.listen_owner }}
+{% endif %}
+{% if item.listen_group is defined %}
+listen.group = {{ item.listen_group }}
+{% endif %}
 
 pm = {{ item.type }}
 pm.max_children = {{ item.max_children | default(5) }}

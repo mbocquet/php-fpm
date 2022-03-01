@@ -28,7 +28,7 @@
 
 - name: package
   package:
-    name: "php{{ php_version | default('7.3') }}-fpm"
+    name: "php{{ php_version | default('7.4') }}-fpm"
   when:
     - not ansible_check_mode
     - repo is succeeded
@@ -44,15 +44,15 @@
 
 - name: check default pool
   stat:
-    path: "/etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/www.conf"
+    path: "/etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf"
   register: defpool
   tags:
     - php-fpm
     - defpool
 
 - name: disable default pool
-  command: "mv /etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/www.conf \
-    /etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/www.conf.off"
+  command: "mv /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf \
+    /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf.off"
   when:
     - defpool.stat.exists
     - fpm_pools is defined
@@ -63,7 +63,7 @@
 - name: "configure pool(s)"
   template:
     src: php-fpm-pool.conf.j2
-    dest: "/etc/php/{{ php_version | default('7.3') }}/fpm/pool.d/\
+    dest: "/etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/\
       {{ item.name }}.conf"
     mode: 0644
     backup: true
