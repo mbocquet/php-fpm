@@ -36,12 +36,6 @@
     - php-fpm
     - package
 
-- name: service_facts
-  ansible.builtin.service_facts:
-  tags:
-    - php-fpm
-    - facts
-
 - name: check default pool
   stat:
     path: "/etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf"
