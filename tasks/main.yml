@@ -1,64 +1,63 @@
 ---
 # tasks file for php-fpm
-- name: sury repo key
-  apt_key:
-    url: "https://packages.sury.org/php/apt.gpg"
-    state: present
-  when:
-    - php_origin is defined
-    - php_origin == "sury"
-  tags:
-    - php-fpm
-    - apt
-    - key
+- block:
+  - name: apt key
+    get_url:
+      url: "{{ php_sury_apt_key_url }}"
+      dest: "{{ php_sury_apt_key }}"
+      mode: 0644
+    # https://github.com/ansible/ansible/issues/65687
+    when: not ansible_check_mode
+    tags:
+      - php-fpm
+      - apt
+      - key
 
-- name: sury repo
-  apt_repository:
-    filename: php
-    repo: 'deb https://packages.sury.org/php/ \
-      {{ ansible_distribution_release }} main'
+  - name: sury repo
+    template:
+      src: php.list.j2
+      dest: /etc/apt/sources.list.d/php.list
+      mode: 0644
+    tags:
+      - php-fpm
+      - apt
+      - repository
+
   when:
     - php_origin is defined
     - php_origin == "sury"
-  register: repo
-  tags:
-    - php-fpm
-    - apt
-    - repository
 
 - name: package
   package:
-    name: "php{{ php_version | default('7.4') }}-fpm"
-  when:
-    - not ansible_check_mode
-    - repo is succeeded
+    name: "php{{ item }}-fpm"
+    update_cache: true
+  loop: "{{ php_versions }}"
   tags:
     - php-fpm
     - package
 
-- name: check default pool
-  stat:
-    path: "/etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf"
-  register: defpool
-  tags:
-    - php-fpm
-    - defpool
+# - name: "check default pool(s)"
+#   stat:
+#     path: "/etc/php/{{ item }}/fpm/pool.d/www.conf"
+#   register: defpool
+#   tags:
+#     - php-fpm
+#     - defpool
 
-- name: disable default pool
-  command: "mv /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf \
-    /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf.off"
-  when:
-    - defpool.stat.exists
-    - fpm_pools is defined
-  tags:
-    - php-fpm
-    - defpool
+# - name: "disable default pool(s)"
+#   command: "mv /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf \
+#     /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf.off"
+#   when:
+#     - defpool.stat.exists
+#     - fpm_pools is defined
+#   tags:
+#     - php-fpm
+#     - defpool
 
 - name: "configure pool(s)"
   template:
     src: php-fpm-pool.conf.j2
-    dest: "/etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/\
-      {{ item.name }}.conf"
+    dest: "/etc/php/{{ item.php_version }}/fpm/pool.d/{{ item.name }}.conf"
     mode: 0644
     backup: true
   loop: "{{ fpm_pools }}"

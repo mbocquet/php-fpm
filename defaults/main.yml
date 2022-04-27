@@ -7,17 +7,31 @@
 # php_origin: 'default' (Debian repositories) or 'sury' (deb.sury.org)
 php_origin: 'default'
 
-# php_version: "7.4"
+php_sury_apt_key_url: https://packages.sury.org/php/apt.gpg
+php_sury_apt_key: /etc/apt/trusted.gpg.d/sury.gpg
+php_sury_apt_repository:
+  "deb [signed-by={{ php_sury_apt_key }}] https://packages.sury.org/php
+  {{ ansible_distribution_release }} main"
+
+# php_versions: defines php version(s) to install.
+# Multiple versions can be installed on the same machine.
+# defaults to only 7.4 which is the version shipped with Debian stable.
+php_versions:
+  - '7.4'
+  # - '8.0'
+  # - '8.1'
 
 # fpm_pools: define variables for specific pool types
 # fpm_pools:
 #   - name: 'mypool'
+#     php_version: '7.4'
 #     listen: "/run/php/php{{ php_version }}-fpm-mypool.sock"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: static
 #     max_children: 10
 #   - name: 'yourpool'
+#     php_version: '8.0'
 #     listen: "/run/php/php{{ php_version }}-fpm-yourpool.sock"
 #     listen_owner: www-data
 #     listen_group: www-data
@@ -27,6 +41,7 @@ php_origin: 'default'
 #     min_spare_servers: 1
 #     max_spare_servers: 3
 #   - name: 'theirpool'
+#     php_version: '8.1'
 #     listen: "/run/php/php{{ php_version }}-fpm-theirpool.sock"
 #     listen_owner: www-data
 #     listen_group: www-data
