@@ -13,13 +13,18 @@ php_sury_apt_repository:
   "deb [signed-by={{ php_sury_apt_key }}] https://packages.sury.org/php
   {{ ansible_distribution_release }} main"
 
-# php_versions: defines php version(s) to install.
+# php_versions: define php version(s) to install.
 # Multiple versions can be installed on the same machine.
 # defaults to only 7.4 which is the version shipped with Debian stable.
 php_versions:
   - '7.4'
   # - '8.0'
   # - '8.1'
+
+# php_modules: define php modules packages to install for each php version.
+# php_modules:
+#   - curl
+#   - gd
 
 # fpm_pools: define variables for specific pool types
 # fpm_pools:

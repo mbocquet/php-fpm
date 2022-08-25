@@ -23,6 +23,15 @@
       - apt
       - repository
 
+  - name: stat
+    stat:
+      path: /etc/apt/sources.list.d/php.list
+    register: repo
+    tags:
+      - php-fpm
+      - apt
+      - repository
+
   when:
     - php_origin is defined
     - php_origin == "sury"
@@ -32,9 +41,23 @@
     name: "php{{ item }}-fpm"
     update_cache: true
   loop: "{{ php_versions }}"
+  when: ( php_origin is undefined or php_origin == "default" ) or ( php_origin == "sury" and repo.stat.exists )
   tags:
     - php-fpm
     - package
+
+- name: modules
+  package:
+    name: "php{{ item.0 }}-{{ item.1 }}"
+    update_cache: true
+  loop: "{{ php_versions|product(php_modules)|list }}"
+  when:
+    - php_modules is defined
+    - ( php_origin is undefined or php_origin == "default" ) or ( php_origin == "sury" and repo.stat.exists )
+  tags:
+    - php-fpm
+    - package
+    - modules
 
 # - name: "check default pool(s)"
 #   stat:
