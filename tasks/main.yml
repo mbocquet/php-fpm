@@ -1,8 +1,9 @@
 ---
 # tasks file for php-fpm
-- block:
+- name: origin
+  block:
   - name: apt key
-    get_url:
+    ansible.builtin.get_url:
       url: "{{ php_sury_apt_key_url }}"
       dest: "{{ php_sury_apt_key }}"
       mode: 0644
@@ -14,7 +15,7 @@
       - key
 
   - name: sury repo
-    template:
+    ansible.builtin.template:
       src: php.list.j2
       dest: /etc/apt/sources.list.d/php.list
       mode: 0644
@@ -24,7 +25,7 @@
       - repository
 
   - name: stat
-    stat:
+    ansible.builtin.stat:
       path: /etc/apt/sources.list.d/php.list
     register: repo
     tags:
@@ -37,23 +38,26 @@
     - php_origin == "sury"
 
 - name: package
-  package:
+  ansible.builtin.package:
     name: "php{{ item }}-fpm"
     update_cache: true
   loop: "{{ php_versions }}"
-  when: ( php_origin is undefined or php_origin == "default" ) or ( php_origin == "sury" and repo.stat.exists )
+  when:
+    ( php_origin is undefined or php_origin == "default" ) or
+    ( php_origin == "sury" and repo.stat.exists )
   tags:
     - php-fpm
     - package
 
 - name: modules
-  package:
+  ansible.builtin.package:
     name: "php{{ item.0 }}-{{ item.1 }}"
     update_cache: true
-  loop: "{{ php_versions|product(php_modules)|list }}"
+  loop: "{{ php_versions | product(php_modules) | list }}"
   when:
     - php_modules is defined
-    - ( php_origin is undefined or php_origin == "default" ) or ( php_origin == "sury" and repo.stat.exists )
+    - ( php_origin is undefined or php_origin == "default" ) or
+      ( php_origin == "sury" and repo.stat.exists )
   tags:
     - php-fpm
     - package
@@ -68,7 +72,8 @@
 #     - defpool
 
 # - name: "disable default pool(s)"
-#   command: "mv /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf \
+#   command:
+#     "mv /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf \
 #     /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf.off"
 #   when:
 #     - defpool.stat.exists
@@ -78,7 +83,7 @@
 #     - defpool
 
 - name: "configure pool(s)"
-  template:
+  ansible.builtin.template:
     src: php-fpm-pool.conf.j2
     dest: "/etc/php/{{ item.php_version }}/fpm/pool.d/{{ item.name }}.conf"
     mode: 0644
