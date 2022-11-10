@@ -2,36 +2,36 @@
 # tasks file for php-fpm
 - name: origin
   block:
-  - name: apt key
-    ansible.builtin.get_url:
-      url: "{{ php_sury_apt_key_url }}"
-      dest: "{{ php_sury_apt_key }}"
-      mode: 0644
-    # https://github.com/ansible/ansible/issues/65687
-    when: not ansible_check_mode
-    tags:
-      - php-fpm
-      - apt
-      - key
+    - name: apt key
+      ansible.builtin.get_url:
+        url: "{{ php_sury_apt_key_url }}"
+        dest: "{{ php_sury_apt_key }}"
+        mode: 0644
+      # https://github.com/ansible/ansible/issues/65687
+      when: not ansible_check_mode
+      tags:
+        - php-fpm
+        - apt
+        - key
 
-  - name: sury repo
-    ansible.builtin.template:
-      src: php.list.j2
-      dest: /etc/apt/sources.list.d/php.list
-      mode: 0644
-    tags:
-      - php-fpm
-      - apt
-      - repository
+    - name: sury repo
+      ansible.builtin.template:
+        src: php.list.j2
+        dest: /etc/apt/sources.list.d/php.list
+        mode: 0644
+      tags:
+        - php-fpm
+        - apt
+        - repository
 
-  - name: stat
-    ansible.builtin.stat:
-      path: /etc/apt/sources.list.d/php.list
-    register: repo
-    tags:
-      - php-fpm
-      - apt
-      - repository
+    - name: stat
+      ansible.builtin.stat:
+        path: /etc/apt/sources.list.d/php.list
+      register: repo
+      tags:
+        - php-fpm
+        - apt
+        - repository
 
   when:
     - php_origin is defined
