@@ -3,7 +3,7 @@
 [{{ item.name }}]
 user = www-data
 group = www-data
-listen = {{ item.listen }}
+listen = /run/php/php{{ item.php_version }}-fpm-{{ item.name }}.sock
 {% if item.listen_owner is defined %}
 listen.owner = {{ item.listen_owner }}
 {% endif %}

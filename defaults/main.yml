@@ -30,14 +30,12 @@ php_versions:
 # fpm_pools:
 #   - name: 'mypool'
 #     php_version: '7.4'
-#     listen: "/run/php/php{{ php_version }}-fpm-mypool.sock"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: static
 #     max_children: 10
 #   - name: 'yourpool'
 #     php_version: '8.0'
-#     listen: "/run/php/php{{ php_version }}-fpm-yourpool.sock"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: dynamic
@@ -47,7 +45,6 @@ php_versions:
 #     max_spare_servers: 3
 #   - name: 'theirpool'
 #     php_version: '8.1'
-#     listen: "/run/php/php{{ php_version }}-fpm-theirpool.sock"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: ondemand
