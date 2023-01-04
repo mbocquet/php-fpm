@@ -95,3 +95,5 @@
   tags:
     - php-fpm
     - pools
+
+- import_tasks: config.yml
