@@ -53,7 +53,7 @@
   ansible.builtin.package:
     name: "php{{ item.0 }}-{{ item.1 }}"
     update_cache: true
-  loop: "{{ php_versions | product(php_modules) | list }}"
+  loop: "{{ php_versions | product(php_modules) }}"
   when:
     - php_modules is defined
     - ( php_origin is undefined or php_origin == "default" ) or
