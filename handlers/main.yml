@@ -7,3 +7,11 @@
   loop: "{{ php_versions }}"
   when:
     - not ansible_check_mode
+
+- name: php-fpm reload
+  ansible.builtin.service:
+    name: "php{{ item }}-fpm"
+    state: reloaded
+  loop: "{{ php_versions }}"
+  when:
+    - not ansible_check_mode
