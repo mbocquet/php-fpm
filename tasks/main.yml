@@ -17,7 +17,7 @@
     - name: sury repo
       ansible.builtin.template:
         src: php.list.j2
-        dest: /etc/apt/sources.list.d/php.list
+        dest: "/etc/apt/sources.list.d/{{ php_sury_file }}.list"
         mode: 0644
       tags:
         - php-fpm
@@ -26,7 +26,7 @@
 
     - name: stat
       ansible.builtin.stat:
-        path: /etc/apt/sources.list.d/php.list
+        path: "/etc/apt/sources.list.d/{{ php_sury_file }}.list"
       register: repo
       tags:
         - php-fpm
