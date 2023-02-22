@@ -5,9 +5,10 @@
 # inline vars
 
 # php_origin: 'default' (Debian repositories) or 'sury' (deb.sury.org)
-php_origin: 'default'
+php_origin: default
 
-# APT source list file will go in /etc/apt/sources.list.d/{{ php_sury_file }}.list
+# APT source list file will go in
+# /etc/apt/sources.list.d/{{ php_sury_file }}.list
 php_sury_file: php
 php_sury_apt_key_url: https://packages.sury.org/php/apt.gpg
 php_sury_apt_key: /etc/apt/trusted.gpg.d/sury.gpg
@@ -17,11 +18,10 @@ php_sury_apt_repository:
 
 # php_versions: define php version(s) to install.
 # Multiple versions can be installed on the same machine.
-# defaults to only 7.4 which is the version shipped with Debian stable.
-php_versions:
-  - '7.4'
-  # - '8.0'
-  # - '8.1'
+# php_versions:
+#   - '8.0'
+#   - '8.1'
+#   - '8.2'
 
 # php_modules: define php modules packages to install for each php version.
 # php_modules:

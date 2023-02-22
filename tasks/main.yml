@@ -96,4 +96,5 @@
     - php-fpm
     - pools
 
-- import_tasks: config.yml
+- name: config
+  import_tasks: config.yml
