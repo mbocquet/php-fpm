@@ -98,3 +98,6 @@
 
 - name: config
   import_tasks: config.yml
+  tags:
+    - php-fpm
+    - config

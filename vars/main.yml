@@ -1,2 +1,3 @@
 ---
 # vars file for php-fpm
+__php_version: "8.1"
