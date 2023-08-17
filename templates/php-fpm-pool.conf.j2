@@ -1,16 +1,15 @@
 ; {{ ansible_managed }}. role: {{ role_name }}, template: php-fpm-pool.conf.j2
 
 [{{ item.name }}]
-user = www-data
-group = www-data
-listen = /run/php/php{{ item.php_version }}-fpm-{{ item.name }}.sock
+user = {{ item.user | default('www-data') }}
+group = {{ item.group | default('www-data') }}
+listen = /run/php/php{{ item.php_version }}-fpm{% if item.name != 'www' %}-{{ item.name }}{% endif %}.sock
 {% if item.listen_owner is defined %}
 listen.owner = {{ item.listen_owner }}
 {% endif %}
 {% if item.listen_group is defined %}
 listen.group = {{ item.listen_group }}
 {% endif %}
-
 pm = {{ item.type }}
 pm.max_children = {{ item.max_children | default(5) }}
 {% if item.start_server is defined %}
@@ -25,12 +24,11 @@ pm.max_spare_servers = {{ item.max_spare_servers }}
 {% if item.process_idle_timeout is defined %}
 pm.process_idle_timeout = {{ item.process_idle_timeout }}
 {% endif %}
-
-env[HOSTNAME] = $HOSTNAME
-env[PATH] = /usr/local/bin:/usr/bin:/bin
-env[TMP] = /tmp
-env[TMPDIR] = /tmp
-env[TEMP] = /tmp
+{% if item.env is defined %}
+{% for env in item.env %}
+{{ env }}
+{% endfor %}
+{% endif %}
 {% if item.memory_limit is defined %}
 php_value[memory_limit] = {{ item.memory_limit }}
 {% endif %}
