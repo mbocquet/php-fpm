@@ -19,25 +19,36 @@ php_sury_apt_repository:
 # php_versions: define php version(s) to install.
 # Multiple versions can be installed on the same machine.
 # php_versions:
-#   - '8.0'
-#   - '8.1'
-#   - '8.2'
+#   - "8.1"
+#   - "8.2"
+
+# php_alternatives: define alternative for php when no version is defined. When
+# true, set alternative to php_version or __php_version if php_version is
+# undefined.
+#
+# php_alternatives: true
 
 # php_modules: define php modules packages to install for each php version.
 # php_modules:
 #   - curl
 #   - gd
 
-# fpm_pools: define variables for specific pool types
+# fpm_pools: define variables for specific pool types.
+#
+# On php-fpm install, there's a default pool configured and
+# started named www.conf. If a pool below is named 'www'
+# a diversion is created to keep the default maintainer version
+# as www.conf.distrib.
+#
 # fpm_pools:
-#   - name: 'mypool'
-#     php_version: '7.4'
+#   - name: www
+#     php_version: "8.1"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: static
 #     max_children: 10
-#   - name: 'yourpool'
-#     php_version: '8.0'
+#   - name: yourpool
+#     php_version: "8.1"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: dynamic
@@ -45,11 +56,17 @@ php_sury_apt_repository:
 #     start_servers: 2
 #     min_spare_servers: 1
 #     max_spare_servers: 3
-#   - name: 'theirpool'
-#     php_version: '8.1'
+#   - name: theirpool
+#     php_version: "8.1"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: ondemand
 #     max_children: 120
 #     process_idle_timeout: 120
 #     memory_limit: 128M
+#     env:
+#       - "env[HOSTNAME] = $HOSTNAME"
+#       - "env[PATH] = /usr/local/bin:/usr/bin:/bin"
+#       - "env[TMP] = /tmp"
+#       - "env[TMPDIR] = /tmp"
+#       - "env[TEMP] = /tmp"

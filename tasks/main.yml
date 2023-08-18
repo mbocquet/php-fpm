@@ -63,29 +63,39 @@
     - package
     - modules
 
-# - name: "check default pool(s)"
-#   stat:
-#     path: "/etc/php/{{ item }}/fpm/pool.d/www.conf"
-#   register: defpool
-#   tags:
-#     - php-fpm
-#     - defpool
+- name: Remove old php packages
+  ansible.builtin.package:
+    name: "php{{ item }}"
+    state: absent
+    purge: true
+    update_cache: false
+  loop: "{{ php_remove_old_packages }}"
+  when:
+    - php_remove_old_packages is defined
+  tags:
+    - php-fpm
+    - package
+    - remove
 
-# - name: "disable default pool(s)"
-#   command:
-#     "mv /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf \
-#     /etc/php/{{ php_version | default('7.4') }}/fpm/pool.d/www.conf.off"
-#   when:
-#     - defpool.stat.exists
-#     - fpm_pools is defined
-#   tags:
-#     - php-fpm
-#     - defpool
+- name: "Divert www pool(s)"
+  community.general.dpkg_divert:
+    path: "/etc/php/{{ item.php_version | default(__php_version) }}/fpm/pool.d/www.conf"
+    divert: "/etc/php/{{ item.php_version | default(__php_version) }}/fpm/pool.d/www.conf.distrib"
+    rename: true
+  loop: "{{ fpm_pools }}"
+  notify: php-fpm restart
+  when:
+    - fpm_pools is defined
+    - item.name == "www"
+  tags:
+    - php-fpm
+    - pools
+    - divert
 
 - name: "configure pool(s)"
   ansible.builtin.template:
     src: php-fpm-pool.conf.j2
-    dest: "/etc/php/{{ item.php_version }}/fpm/pool.d/{{ item.name }}.conf"
+    dest: "/etc/php/{{ item.php_version | default(__php_version) }}/fpm/pool.d/{{ item.name }}.conf"
     mode: 0644
     backup: true
   loop: "{{ fpm_pools }}"
@@ -101,3 +111,15 @@
   tags:
     - php-fpm
     - config
+
+- name: Alternatives
+  community.general.alternatives:
+    name: php
+    path: "/usr/bin/php{{ php_version | default(__php_version) }}"
+    state: selected
+  when:
+    - php_alternatives is defined
+    - php_alternatives is true
+  tags:
+    - php-fpm
+    - alternatives
