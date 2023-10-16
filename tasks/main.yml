@@ -79,8 +79,12 @@
 
 - name: "Divert www pool(s)"
   community.general.dpkg_divert:
-    path: "/etc/php/{{ item.php_version | default(__php_version) }}/fpm/pool.d/www.conf"
-    divert: "/etc/php/{{ item.php_version | default(__php_version) }}/fpm/pool.d/www.conf.distrib"
+    path:
+      "/etc/php/{{ item.php_version |
+      default(__php_version) }}/fpm/pool.d/www.conf"
+    divert:
+      "/etc/php/{{ item.php_version |
+      default(__php_version) }}/fpm/pool.d/www.conf.distrib"
     rename: true
   loop: "{{ fpm_pools }}"
   notify: php-fpm restart
@@ -95,7 +99,9 @@
 - name: "configure pool(s)"
   ansible.builtin.template:
     src: php-fpm-pool.conf.j2
-    dest: "/etc/php/{{ item.php_version | default(__php_version) }}/fpm/pool.d/{{ item.name }}.conf"
+    dest:
+      "/etc/php/{{ item.php_version |
+      default(__php_version) }}/fpm/pool.d/{{ item.name }}.conf"
     mode: 0644
     backup: true
   loop: "{{ fpm_pools }}"
