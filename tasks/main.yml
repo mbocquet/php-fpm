@@ -63,20 +63,6 @@
     - package
     - modules
 
-- name: Remove old php packages
-  ansible.builtin.package:
-    name: "php{{ item }}"
-    state: absent
-    purge: true
-    update_cache: false
-  loop: "{{ php_remove_old_packages }}"
-  when:
-    - php_remove_old_packages is defined
-  tags:
-    - php-fpm
-    - package
-    - remove
-
 - name: "Divert www pool(s)"
   community.general.dpkg_divert:
     path:
@@ -118,6 +104,14 @@
     - php-fpm
     - config
 
+- name: stat
+  ansible.builtin.stat:
+    path: "/usr/bin/php{{ php_version | default(__php_version) }}"
+  register: alternative_target
+  tags:
+    - php-fpm
+    - alternatives
+
 - name: Alternatives
   community.general.alternatives:
     name: php
@@ -126,6 +120,7 @@
   when:
     - php_alternatives is defined
     - php_alternatives is true
+    - alternative_target.stat.exists
   tags:
     - php-fpm
     - alternatives
