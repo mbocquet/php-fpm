@@ -1,7 +1,7 @@
 'php-fpm'. Ansible role to install and configure PHP-FPM (FastCGI Process
 Manager).
 
-Copyright © 2018-2019 Mathias Bocquet (mbocquet@sekoya.org)
+Copyright © 2018-2023 Mathias Bocquet (mbocquet@sekoya.org)
 
 This file is part of 'php-fpm' Ansible role.
 
