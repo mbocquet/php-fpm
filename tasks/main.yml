@@ -1,6 +1,9 @@
 ---
 # tasks file for php-fpm
 - name: origin
+  when:
+    - php_origin is defined
+    - php_origin == "sury"
   block:
     - name: apt key
       ansible.builtin.get_url:
@@ -32,10 +35,6 @@
         - php-fpm
         - apt
         - repository
-
-  when:
-    - php_origin is defined
-    - php_origin == "sury"
 
 - name: package
   ansible.builtin.package:
