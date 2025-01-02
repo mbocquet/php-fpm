@@ -65,11 +65,9 @@
 - name: "Divert www pool(s)"
   community.general.dpkg_divert:
     path:
-      "/etc/php/{{ item.php_version |
-      default(__php_version) }}/fpm/pool.d/www.conf"
+      "/etc/php/{{ item.php_version }}/fpm/pool.d/www.conf"
     divert:
-      "/etc/php/{{ item.php_version |
-      default(__php_version) }}/fpm/pool.d/www.conf.distrib"
+      "/etc/php/{{ item.php_version }}/fpm/pool.d/www.conf.distrib"
     rename: true
   loop: "{{ fpm_pools }}"
   notify: php-fpm restart
@@ -85,8 +83,7 @@
   ansible.builtin.template:
     src: php-fpm-pool.conf.j2
     dest:
-      "/etc/php/{{ item.php_version |
-      default(__php_version) }}/fpm/pool.d/{{ item.name }}.conf"
+      "/etc/php/{{ item.php_version }}/fpm/pool.d/{{ item.name }}.conf"
     mode: 0644
     backup: true
   loop: "{{ fpm_pools }}"
@@ -105,7 +102,7 @@
 
 - name: stat
   ansible.builtin.stat:
-    path: "/usr/bin/php{{ php_version | default(__php_version) }}"
+    path: "/usr/bin/php{{ php_version | default(omit) }}"
   register: alternative_target
   tags:
     - php-fpm
@@ -114,7 +111,7 @@
 - name: Alternatives
   community.general.alternatives:
     name: php
-    path: "/usr/bin/php{{ php_version | default(__php_version) }}"
+    path: "/usr/bin/php{{ php_version | default(omit) }}"
     state: selected
   when:
     - php_alternatives is defined

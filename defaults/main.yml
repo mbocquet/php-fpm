@@ -20,11 +20,10 @@ php_sury_apt_repository:
 # Multiple versions can be installed on the same machine.
 # php_versions:
 #   - "8.1"
-#   - "8.2"
+#   - "8.3"
 
-# php_alternatives: define alternative for php when no version is defined. When
-# true, set alternative to php_version or __php_version if php_version is
-# undefined.
+# php_alternatives: define alternative for php when multiple versions are
+# installed. When true, set alternative to php_version.
 #
 # php_alternatives: true
 
@@ -63,7 +62,8 @@ php_sury_apt_repository:
 #     type: ondemand
 #     max_children: 120
 #     process_idle_timeout: 120
-#     memory_limit: 128M
+#     php_values:
+#       memory_limit: 128M
 #     env:
 #       - "env[HOSTNAME] = $HOSTNAME"
 #       - "env[PATH] = /usr/local/bin:/usr/bin:/bin"

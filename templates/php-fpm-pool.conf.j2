@@ -3,7 +3,7 @@
 [{{ item.name }}]
 user = {{ item.user | default('www-data') }}
 group = {{ item.group | default('www-data') }}
-listen = /run/php/php{{ item.php_version | default(__php_version) }}-fpm{% if item.name != 'www' %}-{{ item.name }}{% endif %}.sock
+listen = /run/php/php{{ item.php_version | default(omit) }}-fpm{% if item.name != 'www' %}-{{ item.name }}{% endif %}.sock
 {% if item.listen_owner is defined %}
 listen.owner = {{ item.listen_owner }}
 {% endif %}
@@ -29,6 +29,8 @@ pm.process_idle_timeout = {{ item.process_idle_timeout }}
 {{ env }}
 {% endfor %}
 {% endif %}
-{% if item.memory_limit is defined %}
-php_value[memory_limit] = {{ item.memory_limit }}
+{% if item.php_values is defined %}
+{% for value in item.php_values | dictsort %}
+php_value[{{ value.0 }}] = {{ value.1 }}
+{% endfor %}
 {% endif %}
