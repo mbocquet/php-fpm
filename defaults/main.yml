@@ -19,8 +19,8 @@ php_sury_apt_repository:
 # php_versions: define php version(s) to install.
 # Multiple versions can be installed on the same machine.
 # php_versions:
-#   - "8.1"
 #   - "8.3"
+#   - "8.4"
 
 # php_alternatives: define alternative for php when multiple versions are
 # installed. When true, set alternative to php_version.
@@ -41,13 +41,13 @@ php_sury_apt_repository:
 #
 # fpm_pools:
 #   - name: www
-#     php_version: "8.1"
+#     php_version: "8.3"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: static
 #     max_children: 10
 #   - name: yourpool
-#     php_version: "8.1"
+#     php_version: "8.4"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: dynamic
@@ -56,7 +56,7 @@ php_sury_apt_repository:
 #     min_spare_servers: 1
 #     max_spare_servers: 3
 #   - name: theirpool
-#     php_version: "8.1"
+#     php_version: "8.4"
 #     listen_owner: www-data
 #     listen_group: www-data
 #     type: ondemand
