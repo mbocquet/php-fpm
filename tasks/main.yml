@@ -11,7 +11,7 @@
         dest: "{{ php_sury_apt_key }}"
         mode: 0644
       # https://github.com/ansible/ansible/issues/65687
-      when: not ansible_check_mode
+      # when: not ansible_check_mode
       tags:
         - php-fpm
         - apt
@@ -93,6 +93,7 @@
   tags:
     - php-fpm
     - pools
+    - template
 
 - name: config
   import_tasks: config.yml
