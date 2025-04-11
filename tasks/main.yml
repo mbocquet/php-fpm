@@ -96,7 +96,7 @@
     - template
 
 - name: config
-  import_tasks: config.yml
+  ansible.builtin.import_tasks: config.yml
   tags:
     - php-fpm
     - config
