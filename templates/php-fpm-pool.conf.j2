@@ -1,4 +1,4 @@
-; {{ ansible_managed }}. role: {{ role_name }}, template: php-fpm-pool.conf.j2
+; Ansible managed. role: {{ role_name }}, template: php-fpm-pool.conf.j2
 
 [{{ item.name }}]
 user = {{ item.user | default('www-data') }}
