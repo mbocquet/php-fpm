@@ -48,7 +48,7 @@
     - php-fpm
     - package
 
-- name: modules
+- name: Modules
   ansible.builtin.package:
     name: "php{{ item.0 }}-{{ item.1 }}"
     update_cache: true
@@ -62,7 +62,7 @@
     - package
     - modules
 
-- name: "Divert www pool(s)"
+- name: Divert www pool
   community.general.dpkg_divert:
     path:
       "/etc/php/{{ item.php_version }}/fpm/pool.d/www.conf"
@@ -79,7 +79,7 @@
     - pools
     - divert
 
-- name: "configure pool(s)"
+- name: Configure pools
   ansible.builtin.template:
     src: php-fpm-pool.conf.j2
     dest:
@@ -95,13 +95,13 @@
     - pools
     - template
 
-- name: config
+- name: Config
   ansible.builtin.import_tasks: config.yml
   tags:
     - php-fpm
     - config
 
-- name: stat
+- name: Stat
   ansible.builtin.stat:
     path: "/usr/bin/php{{ php_version | default(omit) }}"
   register: alternative_target
