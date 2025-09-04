@@ -70,7 +70,7 @@
       "/etc/php/{{ item.php_version }}/fpm/pool.d/www.conf.distrib"
     rename: true
   loop: "{{ fpm_pools }}"
-  notify: php-fpm restart
+  notify: Reload php-fpm
   when:
     - fpm_pools is defined
     - item.name == "www"
@@ -87,7 +87,7 @@
     mode: 0644
     backup: true
   loop: "{{ fpm_pools }}"
-  notify: php-fpm restart
+  notify: Reload php-fpm
   when:
     - fpm_pools is defined
   tags:

@@ -7,7 +7,7 @@
     mode: 0644
   become: true
   loop: "{{ php_ini_templates }}"
-  notify: php-fpm restart
+  notify: Restart php-fpm
   when: php_ini_templates is defined
   tags:
     - php-fpm
