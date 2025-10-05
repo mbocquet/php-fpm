@@ -1,5 +1,5 @@
 ---
-- name: conf.d
+- name: Config files in conf.d
   ansible.builtin.template:
     src: "php-{{ item.key }}-{{ item.value }}.j2"
     dest:
