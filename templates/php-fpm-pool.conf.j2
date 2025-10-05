@@ -24,13 +24,8 @@ pm.max_spare_servers = {{ item.max_spare_servers }}
 {% if item.process_idle_timeout is defined %}
 pm.process_idle_timeout = {{ item.process_idle_timeout }}
 {% endif %}
-{% if item.env is defined %}
-{% for env in item.env %}
-{{ env }}
-{% endfor %}
-{% endif %}
-{% if item.php_values is defined %}
-{% for value in item.php_values | dictsort %}
-php_value[{{ value.0 }}] = {{ value.1 }}
+{% if item.php_conf is defined %}
+{% for conf in item.php_conf | dictsort %}
+{{ conf.0 }} = {{ conf.1 }}
 {% endfor %}
 {% endif %}
