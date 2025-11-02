@@ -4,7 +4,7 @@
     src: "php-{{ item.key }}-{{ item.value }}.j2"
     dest:
       "/etc/php/{{ php_version }}/{{ item.key }}/conf.d/{{ item.value }}"
-    mode: 0644
+    mode: "0644"
   become: true
   loop: "{{ php_ini_templates }}"
   notify: Restart php-fpm
