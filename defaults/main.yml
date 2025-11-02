@@ -62,11 +62,10 @@ php_sury_apt_repository:
 #     type: ondemand
 #     max_children: 120
 #     process_idle_timeout: 120
-#     php_values:
-#       memory_limit: 128M
-#     env:
-#       - "env[HOSTNAME] = $HOSTNAME"
-#       - "env[PATH] = /usr/local/bin:/usr/bin:/bin"
-#       - "env[TMP] = /tmp"
-#       - "env[TMPDIR] = /tmp"
-#       - "env[TEMP] = /tmp"
+#     php_conf:
+#       env[HOSTNAME]: $HOSTNAME
+#       env[PATH]: /usr/local/bin:/usr/bin:/bin
+#       env[TMP]: /tmp
+#       env[TMPDIR]: /tmp
+#       env[TEMP]: /tmp
+#       php_value[memory_limit]: 128M
