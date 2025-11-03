@@ -1,42 +1,38 @@
 ---
 # tasks file for php-fpm
-- name: origin
+- name: Origin
   when:
     - php_origin is defined
     - php_origin == "sury"
+  tags:
+    - php-fpm
   block:
-    - name: apt key
-      ansible.builtin.get_url:
-        url: "{{ php_sury_apt_key_url }}"
-        dest: "{{ php_sury_apt_key }}"
-        mode: 0644
-      # https://github.com/ansible/ansible/issues/65687
-      # when: not ansible_check_mode
+    - name: Sury repo key package
+      ansible.builtin.apt:
+        deb: "{{ php_sury_repokey_apt_package }}"
       tags:
-        - php-fpm
         - apt
+        - repository
         - key
 
-    - name: sury repo
+    - name: Sury repo
       ansible.builtin.template:
         src: php.list.j2
         dest: "/etc/apt/sources.list.d/{{ php_sury_file }}.list"
-        mode: 0644
+        mode: "0644"
       tags:
-        - php-fpm
         - apt
         - repository
 
-    - name: stat
+    - name: Stat
       ansible.builtin.stat:
         path: "/etc/apt/sources.list.d/{{ php_sury_file }}.list"
       register: repo
       tags:
-        - php-fpm
         - apt
         - repository
 
-- name: package
+- name: Package
   ansible.builtin.package:
     name: "php{{ item }}-fpm"
     update_cache: true
@@ -70,7 +66,7 @@
       "/etc/php/{{ item.php_version }}/fpm/pool.d/www.conf.distrib"
     rename: true
   loop: "{{ fpm_pools }}"
-  notify: Reload php-fpm
+  notify: Restart php-fpm
   when:
     - fpm_pools is defined
     - item.name == "www"
@@ -84,10 +80,10 @@
     src: php-fpm-pool.conf.j2
     dest:
       "/etc/php/{{ item.php_version }}/fpm/pool.d/{{ item.name }}.conf"
-    mode: 0644
+    mode: "0644"
     backup: true
   loop: "{{ fpm_pools }}"
-  notify: Reload php-fpm
+  notify: Restart php-fpm
   when:
     - fpm_pools is defined
   tags:
