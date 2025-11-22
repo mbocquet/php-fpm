@@ -18,7 +18,7 @@
     - name: Sury repo
       ansible.builtin.template:
         src: php.list.j2
-        dest: "/etc/apt/sources.list.d/{{ php_sury_file }}.list"
+        dest: /etc/apt/sources.list.d/{{ php_sury_file }}.list
         mode: "0644"
       tags:
         - apt
@@ -26,7 +26,7 @@
 
     - name: Stat
       ansible.builtin.stat:
-        path: "/etc/apt/sources.list.d/{{ php_sury_file }}.list"
+        path: /etc/apt/sources.list.d/{{ php_sury_file }}.list
       register: repo
       tags:
         - apt
@@ -34,7 +34,7 @@
 
 - name: Package
   ansible.builtin.package:
-    name: "php{{ item }}-fpm"
+    name: php{{ item }}-fpm
     update_cache: true
   loop: "{{ php_versions }}"
   when:
@@ -46,7 +46,7 @@
 
 - name: Modules
   ansible.builtin.package:
-    name: "php{{ item.0 }}-{{ item.1 }}"
+    name: php{{ item.0 }}-{{ item.1 }}
     update_cache: true
   loop: "{{ php_versions | product(php_modules) }}"
   when:
@@ -61,9 +61,9 @@
 - name: Divert www pool
   community.general.dpkg_divert:
     path:
-      "/etc/php/{{ item.php_version }}/fpm/pool.d/www.conf"
+      /etc/php/{{ item.php_version }}/fpm/pool.d/www.conf
     divert:
-      "/etc/php/{{ item.php_version }}/fpm/pool.d/www.conf.distrib"
+      /etc/php/{{ item.php_version }}/fpm/pool.d/www.conf.distrib
     rename: true
   loop: "{{ fpm_pools }}"
   notify: Restart php-fpm
@@ -79,7 +79,7 @@
   ansible.builtin.template:
     src: php-fpm-pool.conf.j2
     dest:
-      "/etc/php/{{ item.php_version }}/fpm/pool.d/{{ item.name }}.conf"
+      /etc/php/{{ item.php_version }}/fpm/pool.d/{{ item.name }}.conf
     mode: "0644"
     backup: true
   loop: "{{ fpm_pools }}"
@@ -99,7 +99,7 @@
 
 - name: Stat
   ansible.builtin.stat:
-    path: "/usr/bin/php{{ php_version | default(omit) }}"
+    path: /usr/bin/php{{ php_version | default(omit) }}
   register: alternative_target
   tags:
     - php-fpm
@@ -108,7 +108,7 @@
 - name: Alternatives
   community.general.alternatives:
     name: php
-    path: "/usr/bin/php{{ php_version | default(omit) }}"
+    path: /usr/bin/php{{ php_version | default(omit) }}
     state: selected
   when:
     - php_alternatives is defined

@@ -13,8 +13,8 @@ php_sury_file: php
 php_sury_repokey_apt_package: https://packages.sury.org/debsuryorg-archive-keyring.deb
 php_sury_apt_key: /usr/share/keyrings/debsuryorg-archive-keyring.gpg
 php_sury_apt_repository:
-  "deb [signed-by={{ php_sury_apt_key }}] https://packages.sury.org/php/
-  {{ ansible_lsb['codename'] }} main"
+  deb [signed-by={{ php_sury_apt_key }}] https://packages.sury.org/php/
+  {{ ansible_lsb['codename'] }} main
 
 # php_versions: define php version(s) to install.
 # Multiple versions can be installed on the same machine.

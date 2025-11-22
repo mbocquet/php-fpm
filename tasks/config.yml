@@ -1,9 +1,9 @@
 ---
 - name: Config files in conf.d
   ansible.builtin.template:
-    src: "php-{{ item.key }}-{{ item.value }}.j2"
+    src: php-{{ item.key }}-{{ item.value }}.j2
     dest:
-      "/etc/php/{{ php_version }}/{{ item.key }}/conf.d/{{ item.value }}"
+      /etc/php/{{ php_version }}/{{ item.key }}/conf.d/{{ item.value }}
     mode: "0644"
   become: true
   loop: "{{ php_ini_templates }}"
