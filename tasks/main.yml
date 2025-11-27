@@ -14,6 +14,11 @@
         - apt
         - repository
         - key
+      environment: "{{ proxy_env }}"
+      register: apt_key_result
+      until: apt_key_result is succeeded
+      retries: 5
+      delay: 5
 
     - name: Sury repo
       ansible.builtin.template:
